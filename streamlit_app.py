@@ -17,8 +17,8 @@ N_STEPS = 30
 FORECAST_DAYS = 7
 
 # --- HEADER ---
-st.set_page_config(page_title="Smart Rainwater System by Nikhitha", layout="centered")
-st.title("💧 Smart Rainwater Harvesting Dashboard by Nikhitha")
+st.set_page_config(page_title="Smart Rainwater System", layout="centered")
+st.title("💧 Smart Rainwater Harvesting Dashboard")
 st.markdown("""
 ### 📌 Instructions:
 Please upload a `.csv` file with these columns:
@@ -32,11 +32,13 @@ try:
         st.download_button(
             label="📥 Click here to download the sample file (Date.csv)",
             data=file,
-            file_name="Date.csv",
+            file_name="Date.csv",  # keep the same name for upload convenience
             mime="text/csv"
         )
 except FileNotFoundError:
     st.warning("⚠️ Sample file not found. Make sure 'Date.csv' is in the same GitHub folder.")
+
+
 
 
 # --- LOAD CSV FILE ---
@@ -143,20 +145,10 @@ if uploaded_file is not None:
     })
 
     st.subheader("📅 Forecast & Usage Schedule")
-    st.dataframe(result_df.style.format({
-        "Forecasted_Rainfall_mm": "{:.2f}",
-        "Estimated_Consumption_L": "{:.2f}",
-        "Optimized_Tank_Usage_L": "{:.2f}"
-    }))
+    st.dataframe(result_df.style.format({"Forecasted_Rainfall_mm": "{:.2f}", "Estimated_Consumption_L": "{:.2f}", "Optimized_Tank_Usage_L": "{:.2f}"}))
 
     st.subheader("📊 Visual Comparison")
-    st.line_chart(result_df.set_index("Date")[[
-        "Forecasted_Rainfall_mm", "Optimized_Tank_Usage_L", "Estimated_Consumption_L"
-    ]])
+    st.line_chart(result_df.set_index("Date")[["Forecasted_Rainfall_mm", "Optimized_Tank_Usage_L", "Estimated_Consumption_L"]])
 
 else:
     st.info("Upload a CSV file with 'Date' and 'Rainfall_mm' columns to start.")
-
-# --- FOOTER ---
-st.markdown("---")
-st.markdown("🧠 Developed by **Nikhitha Illa** | Smart Rainwater AI")
